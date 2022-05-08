@@ -1,5 +1,5 @@
 import { ArrowLeft } from "phosphor-react";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { FeedbackType, feedbackTypes } from "..";
 import { ScreenshotButton } from "../ScreenshotButton";
 
@@ -11,6 +11,12 @@ interface FeedbackContentStepProps {
 export function FeedbackContentStep({ feedbackType, handleClose }: FeedbackContentStepProps) {
   const feedbackTypeInfo = feedbackTypes[feedbackType];
   const [screenshot, setScreenshot] = useState<string | null>(null)
+  const [comment, setComment] = useState('');
+
+  function handleSubmitFeedback(event: FormEvent) {
+    event.preventDefault();
+    console.log({ comment, screenshot });
+  }
   
   return (
     <>
@@ -32,12 +38,13 @@ export function FeedbackContentStep({ feedbackType, handleClose }: FeedbackConte
         </span>
       </header>
 
-      <div className="fex py-8 gap-2 w-full">
+      <form onSubmit={handleSubmitFeedback} className="my-4 w-full">
         <textarea
-          name=""
-          id=""
+          name="comment"
+          id="comment"
           cols={30}
           rows={5}
+          onChange={(event) => setComment(event.target.value)}
           className="min-w-[304px] w-full min-h-[112px] text-sm placeholder-zinc-500 border-zinc-600 bg-transparent rounded-md 
             focus:border-brand-500 focus:ring-brand-500 focus:ring-1 focus:outline-none resize-none 
             scrollbar scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin"
@@ -48,14 +55,15 @@ export function FeedbackContentStep({ feedbackType, handleClose }: FeedbackConte
           <ScreenshotButton screenshot={screenshot} onScreenshotTook={setScreenshot} />
           <button
             type="submit"
+            disabled={comment.length === 0}
             className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex justify-center items-center text-sm
-              hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500
+              hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 disabled:opacity-50 disabled:hover:bg-brand-500
               transition-colors"
           >
             Enviar feedback
           </button>
         </footer>
-      </div>
+      </form>
     </>
   )
 }
