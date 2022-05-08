@@ -1,12 +1,11 @@
+import { Widget } from './components/Widget'
 import './global.css'
 
 function App() {
   return (
     <>
-      <button>
-        Olá
-      </button>
       <h1>Hello world !</h1>
+      <Widget />
     </>
   )
 }
